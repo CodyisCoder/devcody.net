@@ -7,87 +7,84 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f4f7f6;
+            background-color: #f7f7f7;
             margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
         .container {
-            background-color: #ffffff;
-            padding: 40px 50px;
-            border-radius: 10px;
-            width: 100%;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
             max-width: 900px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
         }
         h1 {
             text-align: center;
-            color: #2c3e50;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
+            color: #333;
             margin-bottom: 30px;
         }
         .section {
             display: flex;
-            justify-content: space-between;
+            gap: 40px;
             margin-bottom: 40px;
-        }
-        .section label {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: #34495e;
         }
         .input-container {
             flex: 1;
-            padding-right: 20px;
+        }
+        label {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 8px;
+            display: block;
         }
         .textarea {
             width: 100%;
             height: 180px;
             padding: 15px;
-            margin-top: 10px;
-            border: 2px solid #7f8c8d;
+            border: 1px solid #ccc;
             border-radius: 5px;
-            resize: vertical;
+            background-color: #fafafa;
             font-size: 1rem;
-            color: #2c3e50;
-            background-color: #ecf0f1;
+            color: #333;
+            resize: vertical;
+            margin-top: 10px;
         }
         .button {
-            background-color: #27ae60;
+            background-color: #4CAF50;
             color: white;
             border: none;
             padding: 12px 24px;
             margin-top: 15px;
             cursor: pointer;
             border-radius: 5px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             transition: background-color 0.3s;
+            width: 100%;
         }
         .button:hover {
-            background-color: #2ecc71;
+            background-color: #45a049;
         }
         .output {
             padding: 15px;
-            background-color: #ecf0f1;
+            background-color: #fafafa;
             border-radius: 5px;
             font-family: 'Courier New', monospace;
             word-wrap: break-word;
-            min-height: 120px;
             margin-top: 20px;
+            min-height: 120px;
         }
         .output span {
             display: block;
-            color: #2c3e50;
-            word-wrap: break-word;
+            color: #333;
         }
-        hr {
-            border: none;
-            height: 1px;
-            background-color: #bdc3c7;
-            margin: 40px 0;
+        .error {
+            color: #e74c3c;
+            font-size: 1rem;
         }
     </style>
 </head>
@@ -97,14 +94,14 @@
 
         <div class="section">
             <div class="input-container">
-                <label for="encodeInput">Text to Encode:</label>
+                <label for="encodeInput">Text to Encode</label>
                 <textarea id="encodeInput" class="textarea" placeholder="Enter text to encode..."></textarea>
                 <button onclick="encodeBase64()" class="button">Encode</button>
                 <div id="encodedOutput" class="output"></div>
             </div>
 
             <div class="input-container">
-                <label for="decodeInput">Base64 to Decode:</label>
+                <label for="decodeInput">Base64 to Decode</label>
                 <textarea id="decodeInput" class="textarea" placeholder="Enter base64 encoded text..."></textarea>
                 <button onclick="decodeBase64()" class="button">Decode</button>
                 <div id="decodedOutput" class="output"></div>
@@ -114,18 +111,26 @@
 
     <script>
         function encodeBase64() {
-            var text = document.getElementById('encodeInput').value;
-            var encodedText = btoa(text);
+            const text = document.getElementById('encodeInput').value;
+            if (text.trim() === '') {
+                document.getElementById('encodedOutput').innerHTML = '<span class="error">Please enter some text to encode.</span>';
+                return;
+            }
+            const encodedText = btoa(text);
             document.getElementById('encodedOutput').innerHTML = '<span>' + encodedText + '</span>';
         }
 
         function decodeBase64() {
-            var encodedText = document.getElementById('decodeInput').value;
+            const encodedText = document.getElementById('decodeInput').value;
+            if (encodedText.trim() === '') {
+                document.getElementById('decodedOutput').innerHTML = '<span class="error">Please enter some base64 text to decode.</span>';
+                return;
+            }
             try {
-                var decodedText = atob(encodedText);
+                const decodedText = atob(encodedText);
                 document.getElementById('decodedOutput').innerHTML = '<span>' + decodedText + '</span>';
             } catch (e) {
-                document.getElementById('decodedOutput').innerHTML = '<span style="color: #e74c3c;">Invalid base64 string</span>';
+                document.getElementById('decodedOutput').innerHTML = '<span class="error">Invalid base64 string.</span>';
             }
         }
     </script>
